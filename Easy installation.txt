@@ -17,12 +17,39 @@ Step2 Create pub/private keys
 	
 step 3  Bring up site
 	i. 	ansible-playbook -i hosts site.yml
-	ii.     http://localhost:8080/haproxy?stats	# Shows the stats brought back by haproxy
-	iii.	http://localhost:8080    		# shows the web page being load balanced
+	ii.     http://localhost:8080/haproxy?stats	# Shows the stats brought back by haproxy   	#from your local machine please
+	iii.	http://localhost:8080    		# shows the web page being load balanced	#from your local machine pleasel
 	
-step 4  Doing some site tests
-	i. git clone https://github.com/michaelJava69/project.git
-	ii. nosetests --verbosity=2 project      # https://realpython.com/testing-third-party-apis-with-mocks/
+	iv.     $  curl -I http://localhost:8080        # from your local machine please
+			  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+							 Dload  Upload   Total   Spent    Left  Speed
+			  0   636    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0HTTP/1.1 200 OK
+			Server: nginx
+			Date: Mon, 28 Oct 2019 13:03:12 GMT
+			Content-Type: text/html
+			Content-Length: 636
+			X-Backend-Server: web2
+			Cache-Control: private
+			Accept-Ranges: bytes
+			
+	v.      $  curl -I http://localhost:8080
+			  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+							 Dload  Upload   Total   Spent    Left  Speed
+			  0   636    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0HTTP/1.1 200 OK
+			Server: nginx
+			Date: Mon, 28 Oct 2019 13:04:13 GMT
+			Content-Type: text/html
+			Content-Length: 636
+			X-Backend-Server: web1
+			Cache-Control: private
+			Accept-Ranges: bytes
+	
+step 4  Doing some site tests    ansible-playbook -i hosts site.yml		 # from your local machine please/ ubuntu64 please with Pythin installed
+	i. 	./bootstrap-local						# setup environment 
+	ii. 	git clone https://github.com/michaelJava69/project.git
+	ii. 	nosetests --verbosity=2 project      # https://realpython.com/testing-third-party-apis-with-mocks/
+		This should report a fal on one of the tests looking for web1 50% of the time
+
 
 	
 Note
@@ -34,7 +61,7 @@ The reason you are able to view server details is curtesy to the Ansible Gather 
 Increase number of websites
 	I. alter hosts
 	ii. update vagrant file web loop
-	ii. update set-knownhost.sh
+	ii. update set-knownhost.sh  
 	
 ========================================================================================
 For solution to a Load balancer problem see Problem solving Operational Issues README.md

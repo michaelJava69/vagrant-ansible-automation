@@ -41,6 +41,8 @@ Vagrant.configure("2") do |config|
         vb.memory = MEMORY
         #vb.cpus = CPU
       end
+      
+       
   end
 
   # create some web servers
