@@ -5,11 +5,12 @@
 
 # -*- mode: ruby -*-
 NUMBER_OF_WEBSERVERS = 2
-CPU = 2
+CPU = 1
 MEMORY = 256
 ADMIN_USER = "vagrant"
 ADMIN_PASSWORD = "vagrant"
-VM_VERSION= "ubuntu/trusty64"
+#VM_VERSION= "ubuntu/trusty64"
+VM_VERSION= "bento/ubuntu-16.04"
 #VM_VERSION= "https://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box"
 VAGRANT_VM_PROVIDER = "virtualbox"
 
@@ -24,6 +25,7 @@ Vagrant.configure("2") do |config|
       mgmt_config.vm.network :private_network, ip: "10.0.15.10"
       mgmt_config.vm.provider VAGRANT_VM_PROVIDER do |vb|
         vb.memory = MEMORY
+        #vb.cpus = CPU
       end
        
       mgmt_config.vm.provision :shell, path: "bootstrap-mgmt.sh"
@@ -37,6 +39,7 @@ Vagrant.configure("2") do |config|
       lb_config.vm.network "forwarded_port", guest: 80, host: 8080
       lb_config.vm.provider VAGRANT_VM_PROVIDER do |vb|
         vb.memory = MEMORY
+        #vb.cpus = CPU
       end
   end
 
@@ -50,6 +53,7 @@ Vagrant.configure("2") do |config|
         node.vm.network "forwarded_port", guest: 80, host: "808#{i}"
         node.vm.provider VAGRANT_VM_PROVIDER do |vb|
           vb.memory = MEMORY
+          #vb.cpus = CPU
         end
     end
   end
