@@ -3,21 +3,25 @@
 DevOps Demo is a demonstration of a deployment to two web servers using ansible
 The infra will consist of four boxes. 
 
-i. A local virula box termend the management server that will be the main controller for Ansible.
-ii. A Load balancer virtual box that is the HAProxy server version 1.4.24 by far the most industry standard load balancer on the market # http://www.haproxy.org/#docs
-iii. x2 .....n nginx servers as requested
-
+```bash
+i. 	A local virula box termend the management server that will be the main controller for Ansible.
+ii. 	A Load balancer virtual box that is the HAProxy server version 1.4.24 by far the most industry standard load balancer on the market # http://www.haproxy.org/#docs
+iii. 	x2 .....n nginx servers as requested
+```
 ## Summary 
 
-4 boxes in total , totally managed by Vagrant
-Git installed to facilitate server rolling updates if planned
-A python test harness provided to be run locally instructions given
-Full instructions beow.
+```bash
+i. 	4 boxes in total , totally managed by Vagrant
+ii. 	Git installed to facilitate server rolling updates if planned
+iii.	A python test harness provided to be run locally instructions given
+iv.	Full instructions
+v.	Html screen shots of the website clearly showing loadbalancing together with HAProxy Loadbalancer monitoring page
 
 ## Issues faced
-
-i. bionic/ubuntu64 failed to download to my laptop...perhaphs curruption of my installation or Vgarent site issues. trusty/bionic64 used instead
-ii. Also tested on bentos/ubuntu and issues found and fixed with Load balancer version  - see operational issues
+```bash
+i. 	bionic/ubuntu64 failed to download to my laptop...perhaphs curruption of my installation or Vgarent site issues. trusty/bionic64 used instead
+ii. 	Also tested on bentos/ubuntu and issues found and fixed with Load balancer version  - see operational issues
+```
 
 ## Installation
 
@@ -106,4 +110,8 @@ Increase number of websites
 ```
 
 
-## For solution to a Load balancer problem see Problem solving Operational Issues README.md
+### For solution to a Load balancer problem see Problem solving Operational Issues README.md
+
+```bash
+See also html screen shots of the website and Loadbax monitoring page
+``
