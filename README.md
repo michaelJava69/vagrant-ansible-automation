@@ -1,20 +1,49 @@
+# Vagrant Ansible Automation 
 
-Please follow
+DevOps Demo is a demonstration of a deployment to two web servers using ansible
+The infra will consist of four boxes. 
 
-Step 0 Gte code
-	git clone https://github.com/michaelJava69/ansible-automation.git
-	cd ansible-automation
+i. A local virula box termend the management server that will be the main controller for Ansible.
+ii. A Load balancer virtual box that is the HAProxy server version 1.4.24 by far the most industry standard load balancer on the market # http://www.haproxy.org/#docs
+iii. x2 .....n nginx servers as requested
 
-Step1 Vagrant up
- 	vagrant up
- 	vagrant ssh mgmt
+## Summary 
+
+4 boxes in total , totally managed by Vagrant
+Git installed to facilitate server rolling updates if planned
+A python test harness provided to be run locally instructions given
+Full instructions beow.
+
+## Issues faced
+
+i. bionic/ubuntu64 failed to download to my laptop...perhaphs curruption of my installation or Vgarent site issues. trusty/bionic64 used instead
+ii. Also tested on bentos/ubuntu and issues found and fixed with Load balancer version  - see operational issues
+
+## Installation
+
+```bash
+
+Pre-tasks   Get code
+	i.  	git clone https://github.com/michaelJava69/ansible-automation.git
+	ii. 	cd ansible-automation
+```
+```bash
+
+Step1  Bringin up vagrant 
+ 	i.  	vagrant up
+ 	ii. 	vagrant ssh mgmt
+```
+```bash
+
 Step2 Create pub/private keys
 	i. 	ssh-keygen
 		press return x4
 	ii. 	./set-knownhost.sh                      # add list of server alias to knowhost on mgmt server
 	iii. 	ansible-playbook -i hosts ssh-addkey.yml  --ask-pass 
 	iv.     password = vagrant
-	
+```
+```bash
+
 step 3  Bring up site
 	i. 	ansible-playbook -i hosts site.yml
 	ii.     http://localhost:8080/haproxy?stats	# Shows the stats brought back by haproxy   	#from your local machine please
@@ -43,7 +72,9 @@ step 3  Bring up site
 			X-Backend-Server: web1
 			Cache-Control: private
 			Accept-Ranges: bytes
-	
+```
+```bash
+
 step 4  Doing some site tests    ansible-playbook -i hosts site.yml		 # from your local machine please/ ubuntu64 please with Pythin installed
 	i. 	./bootstrap-local						# setup environment 
 	ii. 	git clone https://github.com/michaelJava69/project.git
@@ -51,18 +82,19 @@ step 4  Doing some site tests    ansible-playbook -i hosts site.yml		 # from you
 		This should report a fal on one of the tests looking for web1 50% of the time
 
 
+```
 
-======================================================
-Recommendations
-======================================================
+## Recommendations
 
+```bash
 I can easily setup a rolling update facility that can be used to update the website in seres so that no loss of service happens
 
+```
 
-==========================================================================================================================
 	
-Note
-====
+## Note
+
+```bash
 The reason you are able to view server details is curtesy to the Ansible Gather facts command being turend on which provides following details in index.html file
 
 	<p>Served by {{ ansible_hostname }} ({{ ansible_eth1.ipv4.address }}).</p>
@@ -71,7 +103,7 @@ Increase number of websites
 	I. alter hosts
 	ii. update vagrant file web loop
 	ii. update set-knownhost.sh  
-	
-========================================================================================
-For solution to a Load balancer problem see Problem solving Operational Issues README.md
-========================================================================================
+```
+
+
+## For solution to a Load balancer problem see Problem solving Operational Issues README.md
