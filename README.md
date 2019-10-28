@@ -84,8 +84,8 @@ step 3  Bring up site
 step 4  Doing some site tests    ansible-playbook -i hosts site.yml		 # from your local machine please/ ubuntu64 please with Pythin installed
 	i. 	./bootstrap-local						# setup environment 
 	ii. 	git clone https://github.com/michaelJava69/project.git
-	ii. 	nosetests --verbosity=2 project      # https://realpython.com/testing-third-party-apis-with-mocks/
-		This should report a fal on one of the tests looking for web1 50% of the time
+	iii. 	nosetests --verbosity=2 project      # https://realpython.com/testing-third-party-apis-with-mocks/
+	iv.	This should report a fail on one of the tests looking for web1 50% of the time
 
 
 ```
@@ -93,7 +93,7 @@ step 4  Doing some site tests    ansible-playbook -i hosts site.yml		 # from you
 ## Recommendations
 
 ```bash
-	I can easily setup a rolling update facility that can be used to update the website in seres so that no loss of service happens
+	i.	I can easily setup a rolling update facility that can be used to update the website in seres so that no loss of service happens
 
 ```
 
