@@ -1,0 +1,290 @@
+Theory
+
+Vagrant has has an Ansible provisioning option, but it requires you to install Ansible on your local machine.
+To me this means creation of an environment outside of your test environment and on your own local system. 
+In doing this it would cuase the following issues
+
+1. You have to make sure you have a local system that is compatible.
+2. Requires the operator has UNIX environment best suited for Ansible.
+2. It is possible that that enivonment would be tampered with by introducing possible code drift.
+ 
+
+Vagrantfile
+
+1. Will spin up a management node 
+   Will have an ubuntu OS
+   Set fixed static address (for eth1 zone) to be used internally for cummunication so that we can utilise later in /etc/hosts to provide readble alias for iPs
+   10.0.15.10  mgnt
+   10.0.15.11  lb
+   10.0.15.21  web
+   10.0.15.22  web
+   
+   note :   	eth1 allows ssh and dhcpv6 access from outside box but is in public zone
+    		if greater firewall protection needed this zone could be made internal 
+    		                             	:  sudo firewall-cmd --permanent --zone=internal --change-internal=eth1
+    		Add the above ip addresses to this internal zone
+    		  				:  sudo firewall-cmd --permanent --add-source="10.0.15.10" repeat for all ip addresses
+    		  				:  sudo firewall-cmd --permanent --add-port=80/tcp
+    		  				:  sudo firewall-cmd reload
+    		  				
+A bootstrap file is used to 
+
+1.	update /etc/hosts enabling aliases for the static ip address set up in zone eth1 for each nodes
+	Vagrant can already suo between nodes becuase when it is set up it creates a dynamic NDS lookup that Vagrant uses to 
+	travel between nodes with instaructions such as
+	vagrant mgnt ssh
+	vagrant lb ssh
+	vagrant web1 ssh
+	vagrant web2 ssh
+2.      Install ansible from the asnible managment repository
+3. 	Copy our workspace to the vagrant home directory and give it vagrant ownership
+
+
+
+boostrap-mgnt
+=============
+
+# install ansible (http://docs.ansible.com/intro_installation.html)
+apt-get -y install software-properties-common
+apt-add-repository -y ppa:ansible/ansible
+apt-get update
+apt-get -y install ansible
+
+# copy examples into /home/vagrant (from inside the mgmt node)
+cp -a /vagrant/examples/* /home/vagrant
+chown -R vagrant:vagrant /home/vagrant
+
+# configure hosts file for our internal network defined by Vagrantfile
+cat >> /etc/hosts <<EOL
+
+# vagrant environment nodes
+10.0.15.10  mgmt
+10.0.15.11  lb
+10.0.15.21  web1
+10.0.15.22  web2
+10.0.15.23  web3
+10.0.15.24  web4
+10.0.15.25  web5
+10.0.15.26  web6
+10.0.15.27  web7
+10.0.15.28  web8
+10.0.15.29  web9
+EOL
+
+
+Enabling vms to communicate (admin to sudo between management server and nodes)
+
+sshkeygen 
+==========
+#################################################
+Genarate it
+##################################################
+
+Step 1:	ssh-keygen
+	vagrant@mgmt:~$ ssh-keygen
+	Generating public/private rsa key pair.
+	Enter file in which to save the key (/home/vagrant/.ssh/id_rsa):
+	Enter passphrase (empty for no passphrase):
+	Enter same passphrase again:
+	Your identification has been saved in /home/vagrant/.ssh/id_rsa.
+	Your public key has been saved in /home/vagrant/.ssh/id_rsa.pub.
+	The key fingerprint is:
+	35:9a:5d:67:e2:e8:be:71:8e:45:d6:54:5e:0d:a8:f4 vagrant@mgmt
+	The key's randomart image is:
+	+--[ RSA 2048]----+
+	|             ...+|
+	|          . .  oo|
+	|         .ooo + .|
+	|         =.=E*   |
+	|        S o + .  |
+	|         . o     |
+	|          o o    |
+	|         . *     |
+	|          +..    |
+	+-----------------+
+
+########################################
+Step 2 :Copy it over to autherized keys on nodes
+##############################################
+
+	ssh-copy-id -i ~/.ssh/id_rsa user@host
+
+	ssh-copy-id -i ~/.ssh/id_rsa vagrant@lb
+	ssh-copy-id -i ~/.ssh/id_rsa vagrant@web2
+	ssh-copy-id -i ~/.ssh/id_rsa vagrant@web1
+
+
+	vagrant@mgmt:~/.ssh$ ssh-copy-id -i ~/.ssh/id_rsa vagrant@web1
+	The authenticity of host 'web1 (10.0.15.21)' can't be established.
+	ECDSA key fingerprint is 75:13:45:cf:86:19:ae:15:1f:c8:c3:af:9c:8d:33:e5.
+	Are you sure you want to continue connecting (yes/no)? yes
+	/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+	/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+	vagrant@web1's password: <vagrant>
+
+	Number of key(s) added: 1
+
+	Now try logging into the machine, with:   "ssh 'vagrant@web1'"
+	and check to make sure that only the key(s) you wanted were added.
+
+
+2nd way  (DOES NOT WORK)
+=======
+ssh-keyscan web1 web2 lb >> ~/.ssh/known_hosts
+ 
+	Pull (x2)x3 hash generated public keys into ansible management servers known_keys 
+
+	
+================
+VERYFYING THINGS
+================
+
+ansible -i hosts all -m ping --ask-pass
+ansible -i hosts all -m ping
+
+vagrant@mgmt:/vagrant/examples$ ps -x
+  PID TTY      STAT   TIME COMMAND
+ 2983 ?        S      0:00 sshd: vagrant@pts/0
+ 2984 pts/0    Ss     0:00 -bash
+ 3783 ?        Ss     0:00 ssh: /home/vagrant/.ansible/cp/ae750fdd40 [mux]
+ 3787 ?        Ss     0:00 ssh: /home/vagrant/.ansible/cp/3eee52bc5e [mux]
+ 3790 ?        Ss     0:00 ssh: /home/vagrant/.ansible/cp/e51df67eb4 [mux]
+ 3820 pts/0    R+     0:00 ps -x
+
+
+
+Replacing Step 2 above with an ansible playbook
+
+======================================
+Modules
+=================================
+keygen mover
+ansible-playbook -i hosts e45-ssh-addkey.yml
+
+apt
+ansible -i hosts web1 -m apt -a "name=ntp state=installed"    				: wrong
+ansible -i hosts web1 -m apt -a "name=ntp state=installed" --sudo			: right
+
+What is NTP?
+Network Time Protocol (NTP) is a standard Internet Protocol (IP) for synchronizing
+the time of computer clocks over a network. The protocol can be used to coordinate
+the real time clocks of computers and networked devices to within a few milliseconds
+of UTC. NTP timestamps are transmitted and received using the User Datagram Protocol
+(UDP) on port 123. Implementations of NTP are available on most operating systems, 
+including Linux, UNIX, macOS and Windows.
+
+
+copy
+ansible -i hosts web1 -m copy -a "src=/home/vagrant/files/ntp.conf dest=/etc/ntp.conf mode=644 owner=root group=root" --sudo
+web1
+
+restart server
+ansible -i hosts web1 -m service -a "name=ntp state=restarted"
+web1
+
+Checking uptime
+ansible -i hosts web -m shell -a "uptime"
+ansible -i hosts all -m shell -a "uptime"
+
+reboot
+ansible -i hosts web -m shell -a "/sbin/reboot"
+
+Gathering facts
+ansible -i hosts web1 -m setup | less
+web1
+
+ansible -i hosts web1 -m setup -a "filter=ansible_distribution"
+web1
+
+ansible -i hosts web1 -m setup -a "filter=ansible_distribution*"
+web1
+
+===================================
+Playbook
+====================
+vagrant@mgmt:~$ cat e45-ntp-install.yml
+---
+- hosts: all
+  sudo: yes
+  gather_facts: no
+
+  tasks:
+
+  - name: install ntp
+    apt: name=ntp state=installed update_cache=yes
+
+  - name: write our ntp.conf
+    copy: src=/home/vagrant/files/ntp.conf dest=/etc/ntp.conf mode=644 owner=root group=root
+    notify: restart ntp
+
+  - name: start ntp
+    service: name=ntp state=started
+
+  handlers:
+
+  - name: restart ntp
+    service: name=ntp state=restarted
+    
+===============================================
+ ansible-playbook -i hosts e45-ntp-install.yml
+ ==================================================
+ 
+===========
+ntp.conf
+=================
+driftfile /var/lib/ntp/ntp.drift
+statistics loopstats peerstats clockstats
+filegen loopstats file loopstats type day enable
+filegen peerstats file peerstats type day enable
+filegen clockstats file clockstats type day enable
+server 0.ubuntu.pool.ntp.org
+server 1.ubuntu.pool.ntp.org
+server 2.ubuntu.pool.ntp.org
+server 3.ubuntu.pool.ntp.org
+server ntp.ubuntu.com
+restrict -4 default kod notrap nomodify nopeer noquery
+restrict -6 default kod notrap nomodify nopeer noquery
+restrict 127.0.0.1
+restrict ::1
+ 
+=========================
+ntp.conf.j2
+===================
+# {{ ansible_managed }}
+driftfile /var/lib/ntp/ntp.drift
+statistics loopstats peerstats clockstats
+filegen loopstats file loopstats type day enable
+filegen peerstats file peerstats type day enable
+filegen clockstats file clockstats type day enable
+server {{ noc_ntpserver }}
+restrict -4 default kod notrap nomodify nopeer noquery
+restrict -6 default kod notrap nomodify nopeer noquery
+restrict 127.0.0.1
+restrict ::1
+ 
+ 
+==========================
+Template
+====================================
+- hosts: all
+  sudo: yes
+  gather_facts: no  
+  vars:
+    noc_ntpserver: 0.ca.pool.ntp.org
+
+  tasks:
+
+  - name: install ntp
+    apt: name=ntp state=installed update_cache=yes
+
+  - name: write our ntp.conf
+    template: src=/home/vagrant/files/ntp.conf.j2 dest=/etc/ntp.conf mode=644 owner=root group=root
+    notify: restart ntp
+
+  - name: start ntp
+    service: name=ntp state=started
+
+  handlers:
+
+  - name: restart ntp
+    service: name=ntp state=restarted

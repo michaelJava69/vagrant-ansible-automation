@@ -1,0 +1,38 @@
+
+Please follow
+
+Step 0 Gte code
+	git clone https://github.com/michaelJava69/ansible-automation.git
+	cd ansible-automation
+
+Step1 Vagrant up
+ 	vagrant up
+ 	vagrant ssh mgmt
+Step2 Create pub/private keys
+	i. 	ssh-keygen
+		press return x4
+	ii. 	./set-knownhost.sh                      # add list of server alias to knowhost on mgmt server
+	iii. 	ansible-playbook -i hosts ssh-addkey.yml  --ask-pass 
+	iv.     password = vagrant
+	
+step 3  Bring up site
+	i. 	ansible-playbook -i hosts site.yml
+	ii.     http://localhost:8080/haproxy?stats	# Shows the stats brought back by haproxy
+		http://localhost:8080    		# shows the web page being load balanced
+	
+	
+	
+Note
+====
+The reason you are able to view server details is curtesy to the Ansible Gather facts command being turend on which provides following details in index.html file
+
+	<p>Served by {{ ansible_hostname }} ({{ ansible_eth1.ipv4.address }}).</p>
+	
+Increase number of websites
+	I. alter hosts
+	ii. update vagrant file web loop
+	ii. update set-knownhost.sh
+	
+========================================================================================
+For solution to a Load balancer problem see Problem solving Operational Issues README.md
+========================================================================================
