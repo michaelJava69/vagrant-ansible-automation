@@ -93,7 +93,7 @@ step 4  Doing some site tests    ansible-playbook -i hosts site.yml		 # from you
 ## Recommendations
 
 ```bash
-I can easily setup a rolling update facility that can be used to update the website in seres so that no loss of service happens
+	I can easily setup a rolling update facility that can be used to update the website in seres so that no loss of service happens
 
 ```
 
@@ -106,14 +106,14 @@ The reason you are able to view server details is curtesy to the Ansible Gather 
 	<p>Served by {{ ansible_hostname }} ({{ ansible_eth1.ipv4.address }}).</p>
 	
 Increase number of websites
-	I. alter hosts
-	ii. update vagrant file web loop
-	ii. update set-knownhost.sh  
+	i. 	alter hosts
+	ii. 	update vagrant file web loop
+	iii. 	update set-knownhost.sh  
 ```
 
 
 ### For solution to a Load balancer problem see Problem solving Operational Issues README.md
 
 ```bash
-See also html screen shots of the website and Loadbax monitoring page
+	See also html screen shots of the website and Loadbax monitoring page
 ``
