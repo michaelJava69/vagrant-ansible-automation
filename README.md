@@ -16,8 +16,10 @@ ii. 	Git installed to facilitate server rolling updates if planned
 iii.	A python test harness provided to be run locally instructions given
 iv.	Full instructions
 v.	Html screen shots of the website clearly showing loadbalancing together with HAProxy Loadbalancer monitoring page
+```
 
 ## Issues faced
+
 ```bash
 i. 	bionic/ubuntu64 failed to download to my laptop...perhaphs curruption of my installation or Vgarent site issues. trusty/bionic64 used instead
 ii. 	Also tested on bentos/ubuntu and issues found and fixed with Load balancer version  - see operational issues
