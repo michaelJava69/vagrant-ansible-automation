@@ -6,9 +6,7 @@ apt-add-repository -y ppa:ansible/ansible
 apt-get update
 apt-get -y install ansible
 
-# install nosetests framework to run python test
-sudo apt -y install python-pip
-pip install nose requests
+                                                        
 
 # copy examples into /home/vagrant (from inside the mgmt node)
 

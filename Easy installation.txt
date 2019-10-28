@@ -18,9 +18,12 @@ Step2 Create pub/private keys
 step 3  Bring up site
 	i. 	ansible-playbook -i hosts site.yml
 	ii.     http://localhost:8080/haproxy?stats	# Shows the stats brought back by haproxy
-		http://localhost:8080    		# shows the web page being load balanced
+	iii.	http://localhost:8080    		# shows the web page being load balanced
 	
-	
+step 4  Doing some site tests
+	i. git clone https://github.com/michaelJava69/project.git
+	ii. nosetests --verbosity=2 project      # https://realpython.com/testing-third-party-apis-with-mocks/
+
 	
 Note
 ====
