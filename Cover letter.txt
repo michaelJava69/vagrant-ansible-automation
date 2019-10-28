@@ -1,0 +1,51 @@
+Submission 
+
+
+Hi Chris
+
+Thank you for giving me this challenge
+
+
+Achtitectural decision thoughts
+===============================
+
+1.	No environme not will be remote to the production environemnt  i.e Ansible will be deployed into production environment 
+		Thought process
+			i.	This eanbles the third 3rd (DevOps Principles) :  Infrastructure as code depicts thats wehereevr possible any tools and environmenst will be created and torn
+				down for a certain purpose and confurations stored in the Golden source together iwth the App.
+			ii.	If installer's  environment hosted Ansible then that config is out of our control and hence where errors will occure
+			iii. 	Security , with tools everywhere security becomes harder as code print is spread
+			iv.	Less technical skills required for installer
+2. 	Clear steps enabling someone less technical to install and spin up app
+
+3.	All confihurations hidden where possible in bash scripts 
+
+4.	Fully explainable out put htmls showing load balance and good prodcution support monitoring html for clear understanding of Load balancer
+
+5.	Vagrant is the user who has sudo priveledges and Ansible is provisioned under this user
+
+6.	Full and seemless ssh betwen all virtual boxes and hostnames used for clarity
+
+
+What we use
+===========
+Vagrant : Created by HashiCorp the people behind Terraform
+          "Vagrant stands on the shoulders of giants. Machines are provisioned on top of VirtualBox, VMware, AWS, or any other provider"
+          
+Ansible : Written in Python stands aprt from its competitors in that it requires no agents be installed on nodes. Totally SSH. Brilliant for Cloud
+
+HAProxy	: Highly Available Proxy written in C and has a reputation for being fast and efficient.
+
+
+
+Code source
+===========
+
+https://github.com/michaelJava69/vagrant-ansible-automation
+
+Enjoy
+
+
+Regards
+
+Michael Ugbechie

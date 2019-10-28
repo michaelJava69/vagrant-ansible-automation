@@ -29,7 +29,7 @@ ii. 	Also tested on bentos/ubuntu and issues found and fixed with Load balancer 
 
 Pre-tasks   Get code
 	i.  	git clone https://github.com/michaelJava69/ansible-automation.git
-	ii. 	cd ansible-automation
+	ii. 	cd vagrant-ansible-automation
 ```
 ```bash
 
