@@ -51,6 +51,15 @@ step 4  Doing some site tests    ansible-playbook -i hosts site.yml		 # from you
 		This should report a fal on one of the tests looking for web1 50% of the time
 
 
+
+======================================================
+Recommendations
+======================================================
+
+I can easily setup a rolling update facility that can be used to update the website in seres so that no loss of service happens
+
+
+==========================================================================================================================
 	
 Note
 ====

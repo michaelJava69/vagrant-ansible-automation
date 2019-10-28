@@ -9,8 +9,8 @@ CPU = 1
 MEMORY = 256
 ADMIN_USER = "vagrant"
 ADMIN_PASSWORD = "vagrant"
-#VM_VERSION= "ubuntu/trusty64"
-VM_VERSION= "bento/ubuntu-16.04"
+VM_VERSION= "ubuntu/trusty64"
+#VM_VERSION= "bento/ubuntu-16.04"
 #VM_VERSION= "https://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box"
 VAGRANT_VM_PROVIDER = "virtualbox"
 
