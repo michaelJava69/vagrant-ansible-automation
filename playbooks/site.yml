@@ -2,10 +2,10 @@
 
 # common
 - hosts: all
-  sudo: yes
-  #become_user: root
+  #sudo: yes
+  become_user: root
   gather_facts: no
-  #become: yes
+  become: yes
   #become_method: sudo
 
   tasks:
@@ -15,9 +15,9 @@
 
 # web
 - hosts: web
-  sudo: yes
-  #become_user: root
-   
+  #sudo: yes
+  become_user: root
+  become: yes   
   
 
   tasks:
@@ -43,10 +43,10 @@
 
 # lb
 - hosts: lb
-  sudo: yes
-  #become_user: root
+  #sudo: yes
+  become_user: root
   #become_method: sudo
-   
+  become: yes   
   
 
   tasks:
