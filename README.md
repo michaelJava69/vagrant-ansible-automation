@@ -45,6 +45,9 @@ Step2 Create pub/private keys
 	i. 	ssh-keygen
 		press return x4
 	ii. 	./set-knownhost.sh                      # add list of server alias to knowhost on mgmt server
+	                                                  had some issues with windows characters in file ran
+							  [ sed -i -e 's/\r$//' set-knownhost.sh ]
+							  
 	iii. 	ansible-playbook -i hosts ssh-addkey.yml  --ask-pass 
 	iv.     password = vagrant
 ```
