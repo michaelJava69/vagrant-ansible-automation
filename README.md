@@ -124,7 +124,7 @@ Increase number of websites
 ### lb haproxy.cfg
 ```
 vagrant@lb:~$ cat /etc/haproxy/haproxy.cfg
-# Ansible managed
+[Ansible managed]
 global
     log         127.0.0.1 local2
 
@@ -135,7 +135,7 @@ global
     group       root
     daemon
 
-    # turn on stats unix socket
+    // turn on stats unix socket
     stats socket /var/lib/haproxy/stats level admin
 
 defaults
@@ -156,7 +156,7 @@ defaults
     timeout check           10s
     maxconn                 3000
 
-    # enable stats uri
+    // enable stats uri
     stats enable
     stats uri /haproxy?stats
 
