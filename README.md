@@ -121,47 +121,13 @@ Increase number of websites
 	See also html screen shots of the website and Loadbax monitoring page
 ``
 
-### lb haproxy.cfg
+### lb snippet of haproxy.cfg
 ```
-vagrant@lb:~$ cat /etc/haproxy/haproxy.cfg
-[Ansible managed]
-global
-    log         127.0.0.1 local2
-
-    chroot      /var/lib/haproxy
-    pidfile     /var/run/haproxy.pid
-    maxconn     4000
-    user        root
-    group       root
-    daemon
-
-    // turn on stats unix socket
-    stats socket /var/lib/haproxy/stats level admin
-
-defaults
-    mode                    http
-    log                     global
-    option                  httplog
-    option                  dontlognull
-    option http-server-close
-    option forwardfor       except 127.0.0.0/8
-    option                  redispatch
-    retries                 3
-    timeout http-request    10s
-    timeout queue           1m
-    timeout connect         10s
-    timeout client          1m
-    timeout server          1m
-    timeout http-keep-alive 10s
-    timeout check           10s
-    maxconn                 3000
-
-    // enable stats uri
-    stats enable
-    stats uri /haproxy?stats
+ 
+ 
 
 backend app
-           listen episode46 10.0.2.15:80
+           listen episode 46 10.0.2.15:80
         balance     roundrobin
             server web1 10.0.15.21 check port 80
             server web2 10.0.15.22 check port 80
