@@ -122,10 +122,9 @@ Increase number of websites
 ``
 
 ### lb snippet of haproxy.cfg
-```
- 
- 
 
+```bash
+ 
 backend app
            listen episode 46 10.0.2.15:80
         balance     roundrobin
