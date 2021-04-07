@@ -119,17 +119,14 @@ Increase number of websites
 
 ```bash
 	See also html screen shots of the website and Loadbax monitoring page
-``
+```
 
 ### lb snippet of haproxy.cfg
 
 ```bash
- 
 backend app
            listen episode 46 10.0.2.15:80
         balance     roundrobin
             server web1 10.0.15.21 check port 80
             server web2 10.0.15.22 check port 80
-
-
 ```
